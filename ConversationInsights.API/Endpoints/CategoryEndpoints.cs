@@ -1,27 +1,41 @@
-﻿namespace ConversationInsights.API.Endpoints
+﻿using ConversationInsights.Application.DTOs;
+using ConversationInsights.Application.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ConversationInsights.API.Endpoints
 {
     public static class CategoryEndpoints
     {
         public static void MapCategoryEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/category", async () =>
+            app.MapGet("/category", async (CategoryService categoryService) =>
             {
-                return Results.NotFound();
+                var categories =  await categoryService.GetAllCategoriesAsync();
+                
+                return Results.Ok(categories);
             });
 
-            app.MapPost("/category", async () =>
+            app.MapPost("/category", async ([FromBody] NewCategoryDTO categoryDTO,
+                CategoryService categoryService) =>
             {
-                return Results.NotFound();
+                await categoryService.AddCategory(categoryDTO);
+                
+                return Results.Created();
             });
 
-            app.MapPut("/category/{category_id}", async (string category_id) =>
+            app.MapPut("/category/{categoryId}", async ([FromRoute] Guid categoryId,
+                [FromBody] NewCategoryDTO categoryDTO,
+                CategoryService categoryService) =>
             {
-                return Results.NotFound();
+                await categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
+                return Results.Ok();
             });
 
-            app.MapDelete("/category/{category_id}", async (string category_id) =>
+            app.MapDelete("/category/{categoryId}", async ([FromRoute] Guid categoryId,
+                CategoryService categoryService) =>
             {
-                return Results.NotFound();
+                await categoryService.DeleteCategoryAsync(categoryId);
+                return Results.Ok();
             });
         }
     }

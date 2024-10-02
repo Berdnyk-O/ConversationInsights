@@ -1,5 +1,6 @@
 using ConversationInsights.API.Endpoints;
 using ConversationInsights.API.Extensions;
+using ConversationInsights.Application.Services;
 using ConversationInsights.Domain.Interfaces;
 using ConversationInsights.Persistence.Database;
 using ConversationInsights.Persistence.Repositories;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<ConversationInsightsDbContext>(opts =>
 builder.Services.AddHostedService<MigrationHostedService>();
 
 builder.Services.AddScoped<IConversationInsightsRepository, ConversationInsightsRepository>();
+builder.Services.AddScoped<CategoryService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

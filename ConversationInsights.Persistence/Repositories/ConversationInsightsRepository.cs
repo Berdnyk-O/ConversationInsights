@@ -16,19 +16,17 @@ namespace ConversationInsights.Persistence.Repositories
 
         public async Task AddCallAsync(Call call)
         {
-            call.Id = Guid.NewGuid();
             await _dbContext.Calls.AddAsync(call);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task AddCategoryAsync(Category category)
         {
-            category.Id = Guid.NewGuid();
             await _dbContext.Categories.AddAsync(category);
             await _dbContext.SaveChangesAsync(); ;
         }
 
-        public async Task DeleteCallById(Guid callId)
+        public async Task DeleteCallByIdAsync(Guid callId)
         {
             var existingCall = await  GetCallByIdAsync(callId);
             if(existingCall != null)
@@ -38,7 +36,7 @@ namespace ConversationInsights.Persistence.Repositories
             }
         }
 
-        public async Task DeleteCategotyById(Guid categoryId)
+        public async Task DeleteCategotyByIdAsync(Guid categoryId)
         {
             var existingCategoty = await GetCategoryByIdAsync(categoryId);
             if (existingCategoty != null)
