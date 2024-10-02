@@ -1,4 +1,5 @@
 using ConversationInsights.API.Endpoints;
+using ConversationInsights.API.Extensions;
 using ConversationInsights.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ builder.Services.AddDbContext<ConversationInsightsDbContext>(opts =>
 {
     opts.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddHostedService<MigrationHostedService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
