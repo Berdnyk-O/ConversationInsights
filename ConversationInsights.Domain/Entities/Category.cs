@@ -7,6 +7,5 @@
         public string[] Points { get; set; } = null!;
         public List<Call> Calls { get; } = [];
         public List<CallCategory> CallCategories { get; } = [];
-       
     }
 }
