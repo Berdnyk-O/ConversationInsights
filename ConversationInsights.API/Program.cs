@@ -1,9 +1,20 @@
 using ConversationInsights.API.Endpoints;
+using ConversationInsights.API.Extensions;
+using ConversationInsights.Domain.Interfaces;
+using ConversationInsights.Persistence.Database;
+using ConversationInsights.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddDbContext<ConversationInsightsDbContext>(opts =>
+{
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddHostedService<MigrationHostedService>();
+
+builder.Services.AddScoped<IConversationInsightsRepository, ConversationInsightsRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
