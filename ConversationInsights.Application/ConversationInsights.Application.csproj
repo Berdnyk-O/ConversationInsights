@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ConversationInsights.Domain\ConversationInsights.Domain.csproj" />
     <ProjectReference Include="..\ConversationInsights.Persistence\ConversationInsights.Persistence.csproj" />
   </ItemGroup>

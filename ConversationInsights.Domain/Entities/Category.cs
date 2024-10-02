@@ -7,5 +7,14 @@
         public string[] Points { get; set; } = null!;
         public List<Call> Calls { get; } = [];
         public List<CallCategory> CallCategories { get; } = [];
+
+        public Category(Guid id,
+            string title,
+            string[] points)
+        {
+            Id = id;
+            Title = title;
+            Points = points;
+        }
     }
 }
