@@ -29,15 +29,25 @@ namespace ConversationInsights.Application.Services
             return categoryDTOs;
         }
 
-        public async Task AddCategory(NewCategoryDTO categoryDTO)
+        public async Task AddCategory(AddCategoryDTO categoryDTO)
         {
             var category = new Category(Guid.NewGuid(), categoryDTO.Title, categoryDTO.Points);
             await _repository.AddCategoryAsync(category);
         }
 
-        public async Task UpdateCategoryAsync(Guid categoryId, NewCategoryDTO categoryDTO)
+        public async Task UpdateCategoryAsync(Guid categoryId, UpdateCategoryDTO categoryDTO)
         {
-            var category = new Category(categoryId, categoryDTO.Title, categoryDTO.Points);
+            var category = await _repository.GetCategoryByIdAsync(categoryId);
+            if(category==null)
+            {
+                throw new NullReferenceException();
+            }
+
+            if(categoryDTO.Title != null)
+            {
+                category.Title = categoryDTO.Title;
+            }
+            category.Points = categoryDTO.Points;
             await _repository.UpdateCategoryAsync(category);
         }
 

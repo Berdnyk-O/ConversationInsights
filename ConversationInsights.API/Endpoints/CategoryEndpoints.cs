@@ -15,7 +15,7 @@ namespace ConversationInsights.API.Endpoints
                 return Results.Ok(categories);
             });
 
-            app.MapPost("/category", async ([FromBody] NewCategoryDTO categoryDTO,
+            app.MapPost("/category", async ([FromBody] AddCategoryDTO categoryDTO,
                 CategoryService categoryService) =>
             {
                 await categoryService.AddCategory(categoryDTO);
@@ -24,11 +24,19 @@ namespace ConversationInsights.API.Endpoints
             });
 
             app.MapPut("/category/{categoryId}", async ([FromRoute] Guid categoryId,
-                [FromBody] NewCategoryDTO categoryDTO,
+                [FromBody] UpdateCategoryDTO categoryDTO,
                 CategoryService categoryService) =>
             {
-                await categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
-                return Results.Ok();
+                try
+                {
+                    await categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
+                    return Results.Ok();
+                }
+                catch(NullReferenceException)
+                {
+                    return Results.UnprocessableEntity();
+                }
+                
             });
 
             app.MapDelete("/category/{categoryId}", async ([FromRoute] Guid categoryId,
