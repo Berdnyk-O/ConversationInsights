@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapCategoryEndpoints();
-
+app.MapCallEndpoints();
 app.UseHttpsRedirection();
 
 app.Run();
