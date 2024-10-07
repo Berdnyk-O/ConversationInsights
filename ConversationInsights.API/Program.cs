@@ -16,6 +16,7 @@ builder.Services.AddHostedService<MigrationHostedService>();
 
 builder.Services.AddScoped<IConversationInsightsRepository, ConversationInsightsRepository>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CallService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

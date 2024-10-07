@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ConversationInsights.Application.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ConversationInsights.API.Endpoints
 {
@@ -11,8 +12,10 @@ namespace ConversationInsights.API.Endpoints
                 return Results.Ok();
             });
 
-            app.MapPost("/call", async ([FromBody] string audioUrl) =>
+            app.MapPost("/call", async ([FromBody] string audioUrl,
+                CallService callService) =>
             {
+                callService.RecognizeCall(audioUrl);
                 return Results.Ok();
             });
         }

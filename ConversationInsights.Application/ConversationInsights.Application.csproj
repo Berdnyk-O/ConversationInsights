@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="System.Speech" Version="8.0.0" />
+    <PackageReference Include="Vosk" Version="0.3.38" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ConversationInsights.Domain\ConversationInsights.Domain.csproj" />
     <ProjectReference Include="..\ConversationInsights.Persistence\ConversationInsights.Persistence.csproj" />
   </ItemGroup>
