@@ -4,7 +4,7 @@ namespace ConversationInsights.Application.Services
 {
     public class CallService
     {
-        private const string AudiosPath = "../ConversationInsights.Application/Audios/{0}";
+        private const string AudioFolderPath = "../ConversationInsights.Application/Audios/";
         private readonly IConversationInsightsRepository _repository;
         
         public CallService(IConversationInsightsRepository repository)
@@ -12,10 +12,21 @@ namespace ConversationInsights.Application.Services
             _repository = repository;
         }
 
-        public void RecognizeCall(string audioUrl)
+        public async Task RecognizeCall(string audioUrl)
         {
+            AudioLoader loader = new();
+
+            var format = audioUrl.Split('.')[^1];
+            var audioPath = await loader.Load(audioUrl, AudioFolderPath, format);
+            Console.WriteLine(audioPath);
+
+            if(format == "mp3")
+            {
+                audioPath = Mp3ToWaveConverter.Convert(audioPath);
+            }
+
             var speechRecognizer = new SpeechRecognizer();
-            var text = speechRecognizer.Recognize(string.Format(AudiosPath, "Audio_zone_Beating_stress.wav"));
+            var text = speechRecognizer.Recognize(audioPath);
             Console.WriteLine(text);
         }
     }
