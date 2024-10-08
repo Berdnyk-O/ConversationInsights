@@ -2,9 +2,9 @@
 
 namespace ConversationInsights.Application
 {
-    public static class Mp3ToWaveConverter
+    public class Mp3ToWaveConverter
     {
-        public static string Convert(string mp3FilePath)
+        public string Convert(string mp3FilePath)
         {
             string waveFilePath = Path.ChangeExtension(mp3FilePath, ".wav");
 
