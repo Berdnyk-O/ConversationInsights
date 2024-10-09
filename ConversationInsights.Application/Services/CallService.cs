@@ -33,6 +33,9 @@ namespace ConversationInsights.Application.Services
 
             var text = _speechRecognizer.Recognize(audioPath);
             Console.WriteLine(text);
+
+            var analyzer = new ConversationInsightsAnalyzer();
+            analyzer.Analyze(text);
         }
     }
 }
