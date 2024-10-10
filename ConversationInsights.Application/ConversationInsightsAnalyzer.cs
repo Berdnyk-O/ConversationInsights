@@ -1,4 +1,5 @@
 ﻿using ConversationInsights.Domain.Enums;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using VaderSharp2;
 
@@ -6,7 +7,8 @@ namespace ConversationInsights.Application
 {
     public class ConversationInsightsAnalyzer
     {
-        private const string LocationFilePath = "../ConversationInsights.Application/Locations/countries.csv";
+        private const string LocationsFilePath = "../ConversationInsights.Application/Locations/countries.csv";
+        private const string NamesFilePath = "../ConversationInsights.Application/Names/names.csv";
         public ConversationInsightsAnalyzer()
         {
                 
@@ -17,6 +19,7 @@ namespace ConversationInsights.Application
             Console.WriteLine(text);
             Console.WriteLine(DefineEmotionalTone(text));
             DefineLocation(text);
+            DefineName(text);
         }
 
         private EmotionalTone DefineEmotionalTone(string text)
@@ -47,7 +50,7 @@ namespace ConversationInsights.Application
         {
             HashSet<string> countriesSet = new HashSet<string>();
 
-            foreach (string line in File.ReadLines(LocationFilePath))
+            foreach (string line in File.ReadLines(LocationsFilePath))
             {
                 countriesSet.Add(line.Trim());
             }
@@ -67,7 +70,26 @@ namespace ConversationInsights.Application
             
             return null;
         }
-        private string? DefineName(string text) {  return null; }
+        private string? DefineName(string text) 
+        {
+            HashSet<string> namesSet = new HashSet<string>();
+
+            foreach (string line in File.ReadLines(NamesFilePath))
+            {
+                namesSet.Add(line.Trim());
+            }
+
+            string pattern = @"\b(" + string.Join("|", namesSet.Select(Regex.Escape)) + @")\b";
+
+            Match match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
+
+            if (match.Success)
+            {
+                return match.Value;
+            }
+
+            return null;
+        }
         private string[] DefineCategories(string text) { return null; }
     }
 }
