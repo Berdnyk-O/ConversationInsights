@@ -7,9 +7,11 @@ namespace ConversationInsights.API.Endpoints
     {
         public static void MapCallEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/call/{callId}", async (Guid callId) =>
+            app.MapGet("/call/{callId}", async (Guid callId,
+                 CallService callService) =>
             {
-                return Results.Ok();
+                var call = await callService.GetCallById(callId);
+                return call;
             });
 
             app.MapPost("/call", async ([FromBody] string audioUrl,

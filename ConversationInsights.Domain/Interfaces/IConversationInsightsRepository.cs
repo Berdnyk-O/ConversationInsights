@@ -17,7 +17,7 @@ namespace ConversationInsights.Domain.Interfaces
         Task AddCallAsync(Call call);
         Task UpdateCallAsync(Call call);
         Task<List<Call>> GetAllCallsAsync();
-        Task<Category?> GetCallByIdAsync(Guid callId);
+        Task<Call?> GetCallByIdAsync(Guid callId);
         Task DeleteCallByIdAsync(Guid callId);
 
     }

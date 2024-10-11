@@ -1,4 +1,5 @@
-﻿using ConversationInsights.Domain.Enums;
+﻿using ConversationInsights.Domain.Entities;
+using ConversationInsights.Domain.Enums;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using VaderSharp2;
@@ -9,17 +10,20 @@ namespace ConversationInsights.Application
     {
         private const string LocationsFilePath = "../ConversationInsights.Application/Locations/countries.csv";
         private const string NamesFilePath = "../ConversationInsights.Application/Names/names.csv";
+        
         public ConversationInsightsAnalyzer()
-        {
-                
+        {       
         }
 
-        public void Analyze(string text)
+        public void PopulateCallDetails(string text, Call call, List<Category> categories)
         {
-            Console.WriteLine(text);
-            Console.WriteLine(DefineEmotionalTone(text));
-            DefineLocation(text);
-            DefineName(text);
+            Console.WriteLine("t:" + text);
+            call.Name = DefineName(text);
+            call.Location = DefineLocation(text);
+            call.EmotionalTone = DefineEmotionalTone(text);
+            call.Text = text;
+            call.Categories = DefineCategories(text, categories);
+            Console.WriteLine("text:" + text);
         }
 
         private EmotionalTone DefineEmotionalTone(string text)
@@ -46,6 +50,7 @@ namespace ConversationInsights.Application
                 return EmotionalTone.Neutral;
             }
         }
+
         private string? DefineLocation(string text)
         {
             HashSet<string> countriesSet = new HashSet<string>();
@@ -70,6 +75,7 @@ namespace ConversationInsights.Application
             
             return null;
         }
+        
         private string? DefineName(string text) 
         {
             HashSet<string> namesSet = new HashSet<string>();
@@ -90,6 +96,23 @@ namespace ConversationInsights.Application
 
             return null;
         }
-        private string[] DefineCategories(string text) { return null; }
+        
+        private List<Category> DefineCategories(string text, List<Category> categories)
+        {
+            List<Category> conversationСategories = new();
+
+            foreach (var category in categories)
+            {
+                string pattern = @"\b(" + string.Join("|", category.Points) + @")\b";
+                var matches = Regex.Matches(text, pattern, RegexOptions.IgnoreCase);
+                if (matches.Count > 0)
+                {
+                    conversationСategories.Add(category);
+                    Console.WriteLine("cat: "+ category.Title);
+                }
+            }
+
+            return conversationСategories;
+        }
     }
 }

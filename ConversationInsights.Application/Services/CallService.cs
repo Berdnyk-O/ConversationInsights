@@ -1,4 +1,7 @@
-﻿using ConversationInsights.Domain.Interfaces;
+﻿using ConversationInsights.Application.DTOs;
+using ConversationInsights.Domain.Entities;
+using ConversationInsights.Domain.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ConversationInsights.Application.Services
 {
@@ -19,23 +22,56 @@ namespace ConversationInsights.Application.Services
             _speechRecognizer = speechRecognizer;
         }
 
+
+        public async Task<CallDTO?> GetCallById(Guid Id)
+        {
+            var call = await _repository.GetCallByIdAsync(Id);
+            var callDTO = new CallDTO
+            {
+                Id = call.Id,
+                Name = call.Name,
+                Location = call.Location,
+                EmotionalTone = call.EmotionalTone.ToString(),
+                Text = call.Text,
+                Categories = call.Categories.Select(x=>x.Title).ToArray()
+            }; 
+
+            return callDTO;
+        }
+
         public async Task RecognizeCall(string audioUrl)
+        {
+            var audioPath = await LoadAudio(audioUrl);
+
+            var text = _speechRecognizer.Recognize(audioPath);
+
+            Call call = new();
+            call.Id = Guid.Parse(Path.GetFileNameWithoutExtension(audioPath));
+            Console.WriteLine(call.Id);
+            var categories = await _repository.GetAllCategoriesAsync();
+
+            var analyzer = new ConversationInsightsAnalyzer();
+            analyzer.PopulateCallDetails(text, call, categories);
+
+            Console.WriteLine(call.Name);
+            Console.WriteLine(call.Id);
+            Console.WriteLine(call.Text);
+
+            await _repository.AddCallAsync(call);
+        }
+
+        private async Task<string> LoadAudio(string audioUrl)
         {
             var format = audioUrl.Split('.')[^1];
             var audioPath = await _audioLoader.Load(audioUrl, AudioFolderPath, format);
-            Console.WriteLine(audioPath);
 
-            if(format == "mp3")
+            if (format == "mp3")
             {
                 var converter = new Mp3ToWaveConverter();
                 audioPath = converter.Convert(audioPath);
             }
 
-            var text = _speechRecognizer.Recognize(audioPath);
-            Console.WriteLine(text);
-
-            var analyzer = new ConversationInsightsAnalyzer();
-            analyzer.Analyze(text);
+            return audioPath;
         }
     }
 }
