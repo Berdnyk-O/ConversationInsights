@@ -32,9 +32,9 @@ namespace ConversationInsights.API.Endpoints
                     await categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
                     return Results.Ok();
                 }
-                catch(NullReferenceException)
+                catch(NullReferenceException ex)
                 {
-                    return Results.UnprocessableEntity();
+                    return Results.UnprocessableEntity(ex.Message);
                 }
                 
             });

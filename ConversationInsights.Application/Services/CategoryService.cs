@@ -40,7 +40,7 @@ namespace ConversationInsights.Application.Services
             var category = await _repository.GetCategoryByIdAsync(categoryId);
             if(category==null)
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("The entity with the specified id does not exist");
             }
 
             if(categoryDTO.Title != null)
