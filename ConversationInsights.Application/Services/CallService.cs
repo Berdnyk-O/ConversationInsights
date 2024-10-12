@@ -39,7 +39,7 @@ namespace ConversationInsights.Application.Services
             return callDTO;
         }
 
-        public async Task RecognizeCall(string audioUrl)
+        public async Task<Guid> RecognizeCall(string audioUrl)
         {
             var audioPath = await LoadAudio(audioUrl);
 
@@ -58,6 +58,8 @@ namespace ConversationInsights.Application.Services
             Console.WriteLine(call.Text);
 
             await _repository.AddCallAsync(call);
+
+            return call.Id;
         }
 
         private async Task<string> LoadAudio(string audioUrl)

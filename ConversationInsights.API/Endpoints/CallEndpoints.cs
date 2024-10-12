@@ -17,8 +17,8 @@ namespace ConversationInsights.API.Endpoints
             app.MapPost("/call", async ([FromBody] string audioUrl,
                 CallService callService) =>
             {
-                await callService.RecognizeCall(audioUrl);
-                return Results.Ok();
+                var callId = await callService.RecognizeCall(audioUrl);
+                return Results.Ok(callId);
             });
         }
     }
