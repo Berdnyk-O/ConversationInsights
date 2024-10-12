@@ -58,7 +58,9 @@ namespace ConversationInsights.Persistence.Repositories
 
         public async Task<Call?> GetCallByIdAsync(Guid callId)
         {
-            return await _dbContext.Calls.FirstOrDefaultAsync(c => c.Id == callId);
+            return await _dbContext.Calls
+                .Include(x=>x.Categories).
+                FirstOrDefaultAsync(c => c.Id == callId);
         }
 
         public async Task<Category?> GetCategoryByIdAsync(Guid categoryId)
@@ -90,11 +92,6 @@ namespace ConversationInsights.Persistence.Repositories
             }
 
             await _dbContext.SaveChangesAsync();
-        }
-
-        Task<Category?> IConversationInsightsRepository.GetCallByIdAsync(Guid callId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
