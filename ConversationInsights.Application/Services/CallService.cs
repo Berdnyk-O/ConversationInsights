@@ -1,7 +1,6 @@
 ﻿using ConversationInsights.Application.DTOs;
 using ConversationInsights.Domain.Entities;
 using ConversationInsights.Domain.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ConversationInsights.Application.Services
 {
@@ -48,20 +47,15 @@ namespace ConversationInsights.Application.Services
             }
 
             var audioPath = await LoadAudio(audioUrl);
-
             var text = _speechRecognizer.Recognize(audioPath);
 
             Call call = new();
             call.Id = Guid.Parse(Path.GetFileNameWithoutExtension(audioPath));
-            Console.WriteLine(call.Id);
+
             var categories = await _repository.GetAllCategoriesAsync();
 
             var analyzer = new ConversationInsightsAnalyzer();
             analyzer.PopulateCallDetails(text, call, categories);
-
-            Console.WriteLine(call.Name);
-            Console.WriteLine(call.Id);
-            Console.WriteLine(call.Text);
 
             await _repository.AddCallAsync(call);
 

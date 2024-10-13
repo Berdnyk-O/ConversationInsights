@@ -21,6 +21,7 @@ namespace ConversationInsights.API.Endpoints
                 try
                 {
                     var categoryId = await categoryService.AddCategory(categoryDTO);
+                    
                     return Results.Created($"/category/{categoryId}", categoryId);
                 }
                 catch (InvalidOperationException ex)
@@ -36,19 +37,20 @@ namespace ConversationInsights.API.Endpoints
                 try
                 {
                     await categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
+                    
                     return Results.Ok();
                 }
                 catch(Exception ex)
                 {
                     return Results.UnprocessableEntity(ex.Message);
                 }
-                
             });
 
             app.MapDelete("/category/{categoryId}", async ([FromRoute] Guid categoryId,
                 CategoryService categoryService) =>
             {
                 await categoryService.DeleteCategoryAsync(categoryId);
+                
                 return Results.Ok();
             });
         }

@@ -67,14 +67,17 @@ namespace ConversationInsights.Application.Services
                 {
                     throw new InvalidOperationException("A category with this title already exists.");
                 }
-                if (category.Points.Length < 1)
-                {
-                    throw new InvalidOperationException("The points array cannot be empty.");
-                }
 
                 category.Title = categoryDTO.Title.Trim();
             }
+
+            if (category.Points.Length < 1)
+            {
+                throw new InvalidOperationException("The points array cannot be empty.");
+            }
+
             category.Points = categoryDTO.Points;
+            
             await _repository.UpdateCategoryAsync(category);
         }
 
