@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace ConversationInsights.Application
+﻿namespace ConversationInsights.Application
 {
     public class AudioLoader
     {

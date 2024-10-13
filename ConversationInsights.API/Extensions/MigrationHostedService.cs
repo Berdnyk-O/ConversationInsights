@@ -1,5 +1,4 @@
-﻿
-using ConversationInsights.Persistence.Database;
+﻿using ConversationInsights.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConversationInsights.API.Extensions

@@ -1,5 +1,4 @@
 ﻿using ConversationInsights.Application.Services;
-using ConversationInsights.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConversationInsights.API.Endpoints
@@ -12,6 +11,7 @@ namespace ConversationInsights.API.Endpoints
                  CallService callService) =>
             {
                 var call = await callService.GetCallById(callId);
+                
                 return call;
             });
 
@@ -21,13 +21,13 @@ namespace ConversationInsights.API.Endpoints
                 try
                 {
                     var callId = await callService.RecognizeCall(audioUrl);
+                    
                     return Results.Created($"/call/{callId}", callId);
                 }
                 catch (Exception ex) 
                 {
                     return Results.UnprocessableEntity(ex.Message);
                 }
-                
             });
         }
     }

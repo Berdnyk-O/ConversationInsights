@@ -1,7 +1,4 @@
-﻿using ConversationInsights.Domain.Entities;
-using ConversationInsights.Domain.Enums;
-
-namespace ConversationInsights.Application.DTOs
+﻿namespace ConversationInsights.Application.DTOs
 {
     public class CallDTO
     {
@@ -11,6 +8,5 @@ namespace ConversationInsights.Application.DTOs
         public string EmotionalTone { get; set; } = null!;
         public string Text { get; set; } = null!;
         public string[] Categories { get; set; } = [];
-
     }
 }
