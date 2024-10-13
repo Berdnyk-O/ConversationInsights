@@ -29,10 +29,21 @@ namespace ConversationInsights.Application.Services
             return categoryDTOs;
         }
 
-        public async Task AddCategory(AddCategoryDTO categoryDTO)
+        public async Task<Guid> AddCategory(AddCategoryDTO categoryDTO)
         {
-            var category = new Category(Guid.NewGuid(), categoryDTO.Title, categoryDTO.Points);
+            var category = new Category(Guid.NewGuid(), categoryDTO.Title.Trim(), categoryDTO.Points);
+            
+            var categories = await _repository.GetAllCategoriesAsync();
+            bool categoryExists = categories.Any(x => x.Title.Equals(category.Title, StringComparison.OrdinalIgnoreCase));
+            
+            if(categoryExists)
+            {
+                throw new InvalidOperationException("A category with this title already exists.");
+            }
+
             await _repository.AddCategoryAsync(category);
+
+            return category.Id;
         }
 
         public async Task UpdateCategoryAsync(Guid categoryId, UpdateCategoryDTO categoryDTO)
@@ -43,9 +54,17 @@ namespace ConversationInsights.Application.Services
                 throw new NullReferenceException("The entity with the specified id does not exist");
             }
 
-            if(categoryDTO.Title != null)
+            if(!string.IsNullOrEmpty(categoryDTO.Title))
             {
-                category.Title = categoryDTO.Title;
+                var categories = await _repository.GetAllCategoriesAsync();
+                bool categoryExists = categories.Any(x => x.Title.Equals(categoryDTO.Title, StringComparison.OrdinalIgnoreCase));
+
+                if (categoryExists)
+                {
+                    throw new InvalidOperationException("A category with this title already exists.");
+                }
+
+                category.Title = categoryDTO.Title.Trim();
             }
             category.Points = categoryDTO.Points;
             await _repository.UpdateCategoryAsync(category);
