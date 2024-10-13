@@ -44,7 +44,7 @@ namespace ConversationInsights.Application.Services
             var extension = Path.GetExtension(audioUrl);
             if (extension != ".mp3" && extension!=".wav")
             {
-                throw new ArgumentException("The provided URL is invalid. URL must point to an mp3 or wav file");    
+                throw new ArgumentException("The provided URL is invalid. URL must point to an mp3 or wav file.");    
             }
 
             var audioPath = await LoadAudio(audioUrl);

@@ -40,6 +40,10 @@ namespace ConversationInsights.Application.Services
             {
                 throw new InvalidOperationException("A category with this title already exists.");
             }
+            if (category.Points.Length<1)
+            {
+                throw new InvalidOperationException("The points array cannot be empty.");
+            }
 
             await _repository.AddCategoryAsync(category);
 
@@ -51,7 +55,7 @@ namespace ConversationInsights.Application.Services
             var category = await _repository.GetCategoryByIdAsync(categoryId);
             if(category==null)
             {
-                throw new NullReferenceException("The entity with the specified id does not exist");
+                throw new NullReferenceException("The entity with the specified id does not exist.");
             }
 
             if(!string.IsNullOrEmpty(categoryDTO.Title))
@@ -62,6 +66,10 @@ namespace ConversationInsights.Application.Services
                 if (categoryExists)
                 {
                     throw new InvalidOperationException("A category with this title already exists.");
+                }
+                if (category.Points.Length < 1)
+                {
+                    throw new InvalidOperationException("The points array cannot be empty.");
                 }
 
                 category.Title = categoryDTO.Title.Trim();
