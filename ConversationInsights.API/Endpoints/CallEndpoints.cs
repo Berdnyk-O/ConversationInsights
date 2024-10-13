@@ -1,4 +1,5 @@
 ﻿using ConversationInsights.Application.Services;
+using ConversationInsights.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConversationInsights.API.Endpoints
@@ -17,8 +18,16 @@ namespace ConversationInsights.API.Endpoints
             app.MapPost("/call", async ([FromBody] string audioUrl,
                 CallService callService) =>
             {
-                var callId = await callService.RecognizeCall(audioUrl);
-                return Results.Ok(callId);
+                try
+                {
+                    var callId = await callService.RecognizeCall(audioUrl);
+                    return Results.Created($"/call/{callId}", callId);
+                }
+                catch (Exception ex) 
+                {
+                    return Results.UnprocessableEntity(ex.Message);
+                }
+                
             });
         }
     }

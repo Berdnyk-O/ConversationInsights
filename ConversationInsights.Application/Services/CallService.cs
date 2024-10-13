@@ -41,6 +41,12 @@ namespace ConversationInsights.Application.Services
 
         public async Task<Guid> RecognizeCall(string audioUrl)
         {
+            var extension = Path.GetExtension(audioUrl);
+            if (extension != ".mp3" && extension!=".wav")
+            {
+                throw new ArgumentException("The provided URL is invalid. URL must point to an mp3 or wav file.");    
+            }
+
             var audioPath = await LoadAudio(audioUrl);
 
             var text = _speechRecognizer.Recognize(audioPath);

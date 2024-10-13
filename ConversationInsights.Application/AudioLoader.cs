@@ -29,11 +29,8 @@ namespace ConversationInsights.Application
             
                     return audioPath;
                 }
-
-                Console.WriteLine($"Failed to download audio. Status code: {response.StatusCode}");
-                    
-                return string.Empty;
                 
+                throw new ArgumentException("The provided URL is invalid. Cannot download file from URL");
             }
         }
     }
