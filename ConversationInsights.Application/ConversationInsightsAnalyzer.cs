@@ -1,14 +1,22 @@
 ﻿using ConversationInsights.Domain.Entities;
 using ConversationInsights.Domain.Enums;
+using ConversationInsights.Domain.Interfaces;
 using System.Text.RegularExpressions;
 using VaderSharp2;
 
 namespace ConversationInsights.Application
 {
-    public class ConversationInsightsAnalyzer
+    public class ConversationInsightsAnalyzer : IConversationInsightsAnalyzer
     {
         private const string LocationsFilePath = "../ConversationInsights.Application/Locations/countries.csv";
         private const string NamesFilePath = "../ConversationInsights.Application/Names/names.csv";
+
+        private readonly SentimentIntensityAnalyzer _analyzer;
+
+        public ConversationInsightsAnalyzer()
+        {
+            _analyzer = new SentimentIntensityAnalyzer();
+        }
 
         public void PopulateCallDetails(string text, Call call, List<Category> categories)
         {
@@ -21,9 +29,7 @@ namespace ConversationInsights.Application
 
         private EmotionalTone DefineEmotionalTone(string text)
         {
-            var analyzer = new SentimentIntensityAnalyzer();
-
-            var results = analyzer.PolarityScores(text);
+            var results = _analyzer.PolarityScores(text);
 
             double positiveScore = results.Positive;
             double negativeScore = results.Negative;
