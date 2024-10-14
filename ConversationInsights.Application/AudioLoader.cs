@@ -1,6 +1,8 @@
-﻿namespace ConversationInsights.Application
+﻿using ConversationInsights.Domain.Interfaces;
+
+namespace ConversationInsights.Application
 {
-    public class AudioLoader
+    public class AudioLoader : IAudioLoader
     {
         private readonly HttpClient _httpClient;
         

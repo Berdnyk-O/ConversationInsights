@@ -9,16 +9,19 @@ namespace ConversationInsights.Application.Services
         private const string AudioFolderPath = "../ConversationInsights.Application/Audios/";
 
         private readonly IConversationInsightsRepository _repository;
-        private readonly AudioLoader _audioLoader;
-        private readonly SpeechRecognizer _speechRecognizer;
+        private readonly IAudioLoader _audioLoader;
+        private readonly ISpeechRecognizer _speechRecognizer;
+        private readonly IConversationInsightsAnalyzer _conversationInsightsAnalyzer;
 
         public CallService(IConversationInsightsRepository repository,
-            AudioLoader audioLoader,
-            SpeechRecognizer speechRecognizer)
+            IAudioLoader audioLoader,
+            ISpeechRecognizer speechRecognizer,
+            IConversationInsightsAnalyzer conversationInsightsAnalyzer)
         {
             _repository = repository;
             _audioLoader = audioLoader;
             _speechRecognizer = speechRecognizer;
+            _conversationInsightsAnalyzer = conversationInsightsAnalyzer;
         }
 
 
@@ -54,8 +57,7 @@ namespace ConversationInsights.Application.Services
 
             var categories = await _repository.GetAllCategoriesAsync();
 
-            var analyzer = new ConversationInsightsAnalyzer();
-            analyzer.PopulateCallDetails(text, call, categories);
+            _conversationInsightsAnalyzer.PopulateCallDetails(text, call, categories);
 
             await _repository.AddCallAsync(call);
 
