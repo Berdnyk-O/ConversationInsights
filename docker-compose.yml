@@ -1,0 +1,40 @@
+version: '3.8'
+
+networks:
+  network1:
+    driver: bridge
+
+services:
+  api:
+    container_name: conversation_insights
+    build:
+      dockerfile: ./ConversationInsights.API/Dockerfile
+    ports:
+      - "8088:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=hostname;Port=5432;Database=conversationinsights;Username=username;Password=password;
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - postgres
+    networks:
+      - network1
+    volumes:
+      - ./local_audios:/ConversationInsights.Application/Audios
+
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=conversationinsights
+    ports:
+      - "5433:5432"
+    restart: always
+    networks:
+      - network1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      
+volumes:
+  postgres_data:
