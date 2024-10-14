@@ -2,10 +2,11 @@
 using NAudio.Wave;
 using System.Text;
 using System.Text.Json;
+using ConversationInsights.Domain.Interfaces;
 
 namespace ConversationInsights.Application
 {
-    public class SpeechRecognizer
+    public class SpeechRecognizer : ISpeechRecognizer
     {
         private const string ModelPath = "../ConversationInsights.Application/VoskModel";
 

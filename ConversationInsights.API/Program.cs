@@ -18,8 +18,9 @@ builder.Services.AddHostedService<MigrationHostedService>();
 builder.Services.AddScoped<IConversationInsightsRepository, ConversationInsightsRepository>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<CallService>();
-builder.Services.AddScoped<AudioLoader>();
-builder.Services.AddScoped<SpeechRecognizer>();
+builder.Services.AddScoped<IAudioLoader, AudioLoader>();
+builder.Services.AddScoped<ISpeechRecognizer, SpeechRecognizer>();
+builder.Services.AddScoped<IConversationInsightsAnalyzer, ConversationInsightsAnalyzer>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
